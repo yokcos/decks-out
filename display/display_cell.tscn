@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c0wy56orv0bfi"]
+
+[ext_resource type="Script" path="res://display/display_cell.gd" id="1_pi8pr"]
+
+[node name="display_cell" type="Sprite2D"]
+rotation = 0.00410152
+scale = Vector2(1.0094, 1.0094)
+script = ExtResource("1_pi8pr")

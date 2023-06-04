@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Piece" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://pieces/piece.gd" id="1_dbfc7"]
+
+[resource]
+script = ExtResource("1_dbfc7")
+id = "bully"
+title = "Bully"
+description = "Attacks directly above, and up-left and up-right\\n{levelled}Damage of the central attack is equal to this Bully's level. Damage to the sides is equal to 1"
+cost = 2.0
+gusto = 1.0
+units = Array[Resource("res://units/unit.gd")]([])

@@ -1,0 +1,5 @@
+notes
+
+a Deck is the list of Pieces that you have available
+a Piece is like a card, a thing that can be played
+a Unit is an entitiy upon the board, that will often attack or activate other cells or something

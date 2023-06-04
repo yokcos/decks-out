@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dwh6vg1f8n08n"
+
+[deps]
+
+files=["res://data/units.Description.translation", "res://data/units.HP.translation", "res://data/units.HP per lv.translation", "res://data/units.Attacks.translation"]
+
+source_file="res://data/units.csv"
+dest_files=["res://data/units.Description.translation", "res://data/units.HP.translation", "res://data/units.HP per lv.translation", "res://data/units.Attacks.translation"]
+
+[params]
+
+compress=true
+delimiter=0

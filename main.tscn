@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://bmod2sd5y3a2j"]
+
+[ext_resource type="Script" path="res://pieces/piece_maker.gd" id="1_f7e88"]
+[ext_resource type="Script" path="res://units/unit_maker.gd" id="2_i7hqq"]
+[ext_resource type="Script" path="res://test.gd" id="2_jvp25"]
+[ext_resource type="PackedScene" uid="uid://snot23p2w25e" path="res://display/display_grid.tscn" id="3_qsvcw"]
+
+[node name="main" type="Node2D"]
+
+[node name="piece_maker" type="Node" parent="."]
+script = ExtResource("1_f7e88")
+input_file = "res://data/pieces.csv"
+
+[node name="unit_maker" type="Node" parent="."]
+script = ExtResource("2_i7hqq")
+input_file = "res://data/units.csv"
+output_folder = "res://units/units/"
+
+[node name="test" type="Node" parent="."]
+script = ExtResource("2_jvp25")
+
+[node name="display_grid" parent="test" instance=ExtResource("3_qsvcw")]
+position = Vector2(576, 319)

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Unit" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://units/unit.gd" id="1_yxpop"]
+
+[resource]
+script = ExtResource("1_yxpop")
+id = "bag_of_knaves"
+name = "Bag of Knaves"
+description = ""
+hp = 1.0
+hp_per_level = 0.0
+attacks = PackedVector2Array()

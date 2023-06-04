@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Piece" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://pieces/piece.gd" id="1_lg4o1"]
+
+[resource]
+script = ExtResource("1_lg4o1")
+id = "bag_of_knaves"
+title = "Bag of Knaves"
+description = "When slain: Releases the three Knaves stored within"
+cost = 1.0
+gusto = 1.0
+units = Array[Resource("res://units/unit.gd")]([])

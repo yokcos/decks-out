@@ -1,0 +1,5 @@
+Name,Description,Cost,Gusto,Units
+Knave,Attacks directly above\n{levelled}Damage is equal to this Knave's level,1,1,
+Bully,"Attacks directly above, and up-left and up-right\n{levelled}Damage of the central attack is equal to this Bully's level. Damage to the sides is equal to 1",2,1,
+Bag of Knaves,When slain: Releases the three Knaves stored within,1,1,
+Peon,Attacks directly below\n{levelled}Damage is equal to this Peon's level,1,1,

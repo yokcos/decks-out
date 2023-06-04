@@ -1,0 +1,5 @@
+Name,Description,HP,HP per lv,Attacks
+Knave,,1,1,"(0, -1)"
+Bully,,1,1,"(-1, -1); (0, -1); (1, -1)"
+Bag of Knaves,,1,0,
+Peon,,1,1,"(0, 1)"
