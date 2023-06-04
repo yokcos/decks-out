@@ -12,6 +12,7 @@ signal unit_added
 signal unit_attacked
 signal unit_damaged
 signal cell_damage
+signal turn_ended
 signal debug_message
 
 
@@ -50,6 +51,7 @@ func resolve_turn():
 		this_unit.resolve_turn()
 	deal_cell_damage()
 	exorcise_units()
+	turn_ended.emit()
 
 # -------- -------- -------- -------- UNITS -------- -------- -------- --------
 

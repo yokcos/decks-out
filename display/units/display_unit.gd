@@ -7,6 +7,8 @@ var unit: UnitInstance = null : set = set_unit
 var tween_active: bool = false
 var tween_queue = []
 
+signal attack_dealt
+
 
 func _process(delta):
 	unqueue_tween()
@@ -29,8 +31,7 @@ func unqueue_tween():
 		this_tween.finished.connect( _on_tween_finished )
 		tween_active = true
 
-func attack( where: Vector2 ):
-	var tween := create_tween()
+func attack_start( tween: Tween, where: Vector2 ):
 	tween.set_trans( Tween.TRANS_CUBIC )
 	
 	tween.tween_property( sprite, "position", -where*.1, .4 )
@@ -41,24 +42,30 @@ func attack( where: Vector2 ):
 	tween.parallel().tween_property( sprite, "scale", Vector2( 1, 1 ), .1 )
 	
 	tween.set_ease( Tween.EASE_OUT )
-	tween.tween_property( sprite, "position", Vector2(), .5 )
+	tween.tween_property( sprite, "position", Vector2(), .1 )
+	tween.parallel().tween_property( sprite, "scale", Vector2( 1.5, 1.5 ), .1 )
 	
-	queue_tween( tween )
+	return tween
+
+func attack_end( tween: Tween ):
+	tween.set_ease( Tween.EASE_OUT )
+	tween.tween_property( sprite, "position", Vector2(), .4 )
+	tween.parallel().tween_property( sprite, "scale", Vector2( 1, 1 ), .4 )
+	
+	return tween
+
+func deal_damage( where: Vector2 ):
+	attack_dealt.emit( DamageInstance.new(), where )
 
 func take_damage( dmg: DamageInstance, shake_vector: Vector2 = Vector2(8, 0) ):
 	var tween := create_tween()
 	var tween_col = tween.parallel()
 	
-	tween.set_trans( Tween.TRANS_CUBIC )
-	tween_col.tween_property( sprite, "modulate", Color(5, 5, 5, 1), .1 )
-	var pt := tween.tween_property( sprite, "position", shake_vector, .1 )
-	pt.set_ease( Tween.EASE_OUT )
+	tween.tween_property( sprite, "modulate", Color(4, 1, 1, 1), .01 )
+	tween.tween_property( sprite, "modulate", Color(1, 1, 1, 1), .39 )
 	
-	tween_col.tween_property( sprite, "modulate", Color(1, 1, 1, 1), .3 )
-	tween.tween_property( sprite, "position", -shake_vector*.5, .2 )
-	tween.tween_property( sprite, "position", Vector2(), .1 )
-	
-	queue_tween( tween )
+	#queue_tween( tween )
+	return tween
 
 func die():
 	queue_free()

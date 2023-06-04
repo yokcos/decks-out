@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="Unit" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://units/unit.gd" id="1_yxpop"]
+[ext_resource type="Script" path="res://units/unit.gd" id="1_gj6ay"]
 
 [resource]
-script = ExtResource("1_yxpop")
+script = ExtResource("1_gj6ay")
 id = "bag_of_knaves"
 name = "Bag of Knaves"
 description = ""

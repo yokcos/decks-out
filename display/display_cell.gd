@@ -13,3 +13,5 @@ func pulse():
 	tween.tween_property( self, "scale", Vector2(1, 1), .9 )
 	tween.parallel().tween_property( self, "rotation", 0, .9 )
 	tween.parallel().tween_property( self, "z_index", 0, .9 )
+	
+	return tween

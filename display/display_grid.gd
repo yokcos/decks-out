@@ -10,7 +10,10 @@ var team_cells = {
 }
 var cells = {}
 var units = {}
+var unresolved_turns = 0
+var animating: bool = false
 var animation_queues := []
+var current_queue: int = 0
 var current_animations := []
 enum {
 	ANIM_ATTACC,
@@ -83,6 +86,7 @@ func set_grid( what: Grid ):
 	grid.unit_attacked.connect( _on_unit_attacked )
 	grid.unit_damaged.connect( _on_unit_damaged )
 	grid.cell_damage.connect( _on_cell_damage )
+	grid.turn_ended.connect( _on_turn_ended )
 
 # -------- -------- -------- -------- ANIMATIONS -------- -------- -------- --------
 
@@ -90,9 +94,26 @@ func destroy_unit( where: Vector2i ):
 	units[where].die()
 	units.erase( where )
 
+func perform_attack( attacker: Vector2i, where: Vector2i ):
+	if units.has( attacker ):
+		var this_unit = units[attacker]
+		var tween := create_tween()
+		this_unit.attack_start( tween, where * cell_size )
+		
+		var target := attacker + where
+		if units.has( target ):
+			var target_unit = units[target]
+			tween.tween_callback( target_unit.take_damage.bind(DamageInstance.new()) )
+		
+		this_unit.attack_end( tween )
+		this_unit.queue_tween( tween )
+		
+		return tween
+
 func add_animation( queue: int, function: Callable ):
-	while animation_queues.size() < queue:
+	while animation_queues.size() < queue+1:
 		animation_queues.append([])
+	animation_queues[queue].append( function )
 
 func pause_animation( time: float ):
 	$animation_timer.start( time )
@@ -108,29 +129,60 @@ func _on_unit_moved( from: Vector2i, to: Vector2i ):
 
 func _on_unit_slain( where: Vector2i ):
 	if units.has( where ):
-		animation_queue.append( destroy_unit.bind( where ) )
+		add_animation( ANIM_DEATH, destroy_unit.bind( where ) )
 
 func _on_unit_attacked( from: Vector2i, where: Vector2i, dmg: DamageInstance ):
-	if units.has( from ):
-		var this_unit = units[from]
-		var relative_vector := Vector2( where * cell_size )
-		animation_queue.append( this_unit.attack.bind(relative_vector) )
+	var relative_vector := Vector2( where )
+	add_animation( ANIM_ATTACC, perform_attack.bind(from, relative_vector) )
 
 func _on_unit_damaged( where: Vector2i, dmg: DamageInstance ):
-	if units.has( where ):
+	if units.has( where ) and false:
 		var shake_vector = Vector2(8, 0).rotated( randf() * PI*2 )
-		animation_queue.append( units[where].take_damage.bind(dmg, shake_vector) )
+		#animation_queue.append( units[where].take_damage.bind(dmg, shake_vector) )
 
 func _on_cell_damage( where: Vector2i ):
-	animation_queue.append( cells[where].pulse )
+	add_animation( ANIM_CELL_DAMAGE, cells[where].pulse )
+	var shake_vector = Vector2(8, 0).rotated( randf() * PI*2 )
+	add_animation( ANIM_CELL_DAMAGE, units[where].take_damage.bind(DamageInstance.new(), shake_vector) )
 
 func _on_display_unit_slain( where: Vector2i ):
 	if units.has( where ):
 		units.erase( where )
 
+func _on_attack_dealt( dmg: DamageInstance, where: Vector2i, attacking_unit: Vector2i ):
+	if units.has( attacking_unit+where ):
+		units[ attacking_unit+where ].take_damage( dmg )
+
+func _on_turn_ended():
+	unresolved_turns += 1
+	animating = true
+
 
 func _on_animation_timer_timeout():
-	if animation_queue.size() > 0:
-		var this_animation: Callable = animation_queue.pop_front()
+	if unresolved_turns > 0:
+		animating = true
+	if !animating:
+		return false
+	if current_queue > animation_queues.size()-1:
+		animating = false
+		current_queue = 0
+		unresolved_turns -= 1
+		return false
+	
+	var this_queue = animation_queues[current_queue]
+	if this_queue.size() > 0:
+		var this_animation: Callable = this_queue.pop_front()
 		if is_instance_valid( this_animation.get_object() ):
-			this_animation.call()
+			var result = this_animation.call()
+			if result is Tween:
+				current_animations.append(result)
+				result.finished.connect( _on_animation_finished.bind(result) )
+	else:
+		current_queue += 1
+
+func _on_animation_finished( what: Tween ):
+	if current_animations.has( what ):
+		current_animations.erase( what )
+		if current_animations.size() <= 0:
+			print("Finishing animation queue")
+			current_queue += 1

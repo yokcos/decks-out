@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="Piece" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://pieces/piece.gd" id="1_74i7c"]
+[ext_resource type="Script" path="res://pieces/piece.gd" id="1_t0fn8"]
 
 [resource]
-script = ExtResource("1_74i7c")
+script = ExtResource("1_t0fn8")
 id = "knave"
 title = "Knave"
 description = "Attacks directly above\\n{levelled}Damage is equal to this Knave's level"
